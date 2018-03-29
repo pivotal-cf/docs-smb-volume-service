@@ -1,28 +1,87 @@
 ---
-title: Installing and Configuring YOUR-PRODUCT-NAME
+title: Installing and Configuring SMB Volume Service for PCF
 owner: Partners
 ---
 
-This topic describes how to install and configure YOUR-PRODUCT-NAME.
+This topic describes how to install and configure SMB Volume Service for PCF.
 
-##<a id='install'></a> Install and Configure YOUR-PRODUCT-NAME
+##<a id='install'></a> Install and Configure SMB Volume Service for PCF
 
 1. Download the product file from Pivotal Network.
 
 1. Navigate to the Ops Manager Installation Dashboard and click **Import a Product** to upload the product file. 
 
-1. Under the **Import a Product** button, click **+** next to the version number of YOUR-PRODUCT-NAME. 
+1. Under the **Import a Product** button, click **+** next to the version number of SMB Volume Service for PCF. 
 This adds the tile to your staging area.
 
-1. Click the newly added **YOUR-PRODUCT-NAME** tile.
+1. Click the newly added **SMB Volume Service for PCF** tile.
 
-1. **This portion of the procedure should tell the users how to configure the newly added tile by
-walking them through the sections. Which fields should they fill out? What are the different
-checkboxes? Include relevant screenshots here.** 
+1. **Service Broker Config**:
 
-1. Click **Save**.
+  1. For **Environment**,
+      - Configure to use preexisting SMB shares, select **Preexisting SMB shares**. You also can create Azure file shares manually,
+        and use them as Preexisting SMB shares.
+      - Configure to use Azure File Service, select the Azure environment where you want to use Azure File Service.
 
-1. Return to the Ops Manager Installation Dashboard and click **Apply changes** to install YOUR-PRODUCT-NAME tile.
+  1. (Optional) For **Tenant ID**, enter the tenant id of your Azure service principal.
 
-**If needed, include additional configuration information below. For example, maybe there are
-configuration options not required for installation but which could be useful for certain users.**
+  1. (Optional) For **Client ID**, enter the client id of your Azure service principal.
+
+  1. (Optional) For **Client Secret**, enter the client secret of your Azure service principal.
+
+  1. (Optional) For **Default Subsctiption ID**, enter the default Azure Subscription id to use for storage accounts.
+
+  1. (Optional) For **Default Resource Group Name**, enter the default resource group name to use for storage accounts.
+
+  1. (Optional) For **Default Location**, enter the location to use for creating storage accounts.
+
+  1. Click **Save**.
+
+1. **Service Broker Database Config**:
+
+  1. For **Database Driver**, select **MsSQL**, or **MySQL** to use Microsoft MsSQL to store broker's state.
+
+  1. (Optional) For **Database CACert**, enter the content of CA Cert to verify SSL connection.
+
+  1. For **Host Name in Certificate**, enter the Common Name (CN) in the server certificate.
+     Enter one of below values to enable TLS encryption when using Azure SQL service, or Azure MySQL service.
+      - For AzureCloud: *.database.windows.net
+      - For AzureUSGovernment: *.database.usgovcloudapi.net
+      - For AzureChinaCloud: *.database.chinacloudapi.cn
+      - For AzureGermanCloud: *.database.cloudapi.de
+
+  1. For **Cloud Foundry Service Name**, enter the service name in VCAP_SERVICES where broker should find database credentials.
+     If this option is set, all db parameters will be extracted from the service binding except **Database CACert**,
+     and **Host Name in Certificate**. It must be set to the service name for the database service as seen in **cf marketplace**
+     which you want to bind to this broker. If you want to use an Azure SQL service, please reference this [guidance](https://github.com/cloudfoundry/smb-volume-release#way-1-cf-push-the-broker).
+
+  1. For **Database Hostname**, enter the database hostname when using SQL to store broker state.
+
+  1. For **Database Port**, enter the database port when using SQL to store broker state.
+
+  1. For **Database Name**, enter the database name when using SQL to store broker state.
+
+  1. For **Database Password**, enter the database password when using SQL to store broker state.
+
+  1. Click **Save**.
+
+1. **Service Broker Bind Config**:
+
+  1. For **Allowed Options**, enter a comma separated list of parameters allowed to be set in during bind operations.
+     Except **share**, and **mount**, others must also be in the list of **Mount Flag Allowed** in **SMB Driver Config**.
+
+  1. For **Default Options**, enter a comma separated list of defaults specified as param:value. If a parameter has a default
+     value, and is not in the allowed list, this default value becomes a fixed value that cannot be overridden.
+
+  1. Click **Save**.
+
+1. **SMB Driver Config**:
+
+  1. For **Mount Flag Allowed**, enter a comma separted list of parameters allowed to be send in extra config.
+     Each of this parameters can be specify by brokers.
+
+  1. For **Mount Flag Default**, enter a comma separted list of like params:value. This list specifies default value of parameters.
+
+  1. Click **Save**.
+
+1. Return to the Ops Manager Installation Dashboard and click **Apply changes** to install SMB Volume Service for PCF tile.
