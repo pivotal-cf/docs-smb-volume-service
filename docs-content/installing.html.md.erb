@@ -3,119 +3,171 @@ title: Installing and Configuring SMB Volume Service for PCF
 owner: Partners
 ---
 
-This topic describes how to install and configure `SMB Volume Service for PCF`.
+This topic describes how to install and configure **SMB Volume Service for PCF**.
 
-##<a id='install'></a> Install and Configure `SMB Volume Service for PCF`
+##<a id='prepare'></a> Step 1: Add SMB Volume Service to Ops Manager
 
 1. Download the product file from Pivotal Network.
 
-1. Navigate to the Ops Manager Installation Dashboard and click `Import a Product` to upload the product file. 
+1. Navigate to the Ops Manager Installation Dashboard and click **Import a Product** to upload the product file. 
 
-1. Under the `Import a Product` button, click `+` next to the version number of `SMB Volume Service`. This adds the tile to your staging area.
+1. Under the **Import a Product** button, click **+** next to the version number of **SMB Volume Service**. This adds the tile to your staging area.
 
-1. Click the newly added `SMB Volume Service` tile.
+1. Click the newly added **SMB Volume Service** tile.
 
-1. `Assign Networks`
+##<a id='network'></a> Step 2: Assign Networks
 
-  1. Please assign a network for `SMB Volume Service` to use. _Network `Deployment` is recommended._
+  1. Select **Assign Networks**.
 
-  1. Click `Save`.
+  1. Please assign a network for **SMB Volume Service** to use. _Network `Deployment` is recommended._
 
-1. `Service Broker Application`:
+  1. Click **Save**.
 
-  1. Configure `Log Level`: Please select `Log Level` by your demand, allowed values includes `error`, `warn`, `info` and `debug`.
+##<a id='broker'></a> Step 3: Service Broker Application Config Using Preexisting Shares Only
 
-  1. Configure `Share Environment`:
+1. Select **Service Broker Application**.
 
-    <p class="note"><strong>Note</strong>: This setting will be frozen after first deployment. </p>
+1. Select **Log Level** by your demand, allowed values includes `error`, `warn`, `info` and `debug`.
 
-    1. To configure the broker to use preexisting SMB shares only, select `Preexisting SMB shares`;
+1. You can configure this service broker to use preexisting SMB shares only or allow it to use Azure File Service by the configuration of **Share Environment**.
 
-    <p class="note"><strong>Note</strong>: You can still create Azure file shares manually and use them as `Preexisting SMB shares` in this mode. </p>
+  <p class="note"><strong>Note</strong>: This setting will be frozen after first deployment.</p>
 
-    1. To allow the broker to use `Azure File Service`, select `Azure File Share`.
+###<a id='broker-preexisting'></a> Use Preexisting Shares Only
 
-      1. For **Tenant ID**, enter the tenant id of your Azure service principal.
+  1. To configure the broker to use preexisting SMB shares only, select `Preexisting SMB shares` for **Share Environment**.
 
-      1. For **Client ID**, enter the client id of your Azure service principal.
+    <p class="note"><strong>Note</strong>: You can still create Azure file shares manually and use them as <strong>Preexisting SMB shares</strong> in this mode.</p>
 
-      1. For **Client Secret**, enter the client secret of your Azure service principal.
+  1. Click **Save**.
 
-      1. For **Default Subsctiption ID**, enter the default Azure Subscription id to use for storage accounts.
+###<a id='broker-azurefile'></a> Allow Azure File Service
 
-      1. For **Default Resource Group Name**, enter the default resource group name to use for storage accounts.
+  1. To allow the broker to use Azure File Service, select `Azure File Share` for **Share Environment**.
 
-      1. For **Default Location**, enter the location to use for creating storage accounts.
+  1. For **Tenant ID**, enter the tenant id of your Azure service principal.
 
-      1. Enable `Allow Create Storage Account` if you want to allow the broker to create storage account.
+  1. For **Client ID**, enter the client id of your Azure service principal.
 
-      1. Enable `Allow Create File Share` if you want to allow the broker to create Azure file share.
+  1. For **Client Secret**, enter the client secret of your Azure service principal.
 
-      1. Enable `Allow Delete Storage Account` if you want to allow the broker to deleet storage account.
+  1. For **Default Subsctiption ID**, enter the default Azure Subscription id to use for storage accounts.
 
-      1. Enable `Allow Delete File Share` if you want to allow the broker to deleet Azure file share.
+  1. For **Default Resource Group Name**, enter the default resource group name to use for storage accounts.
 
-  1. Click `Save`.
+  1. For **Default Location**, enter the location to use for creating storage accounts.
 
-1. `Service Broker Database Config`:
+  1. Enable **Allow Create Storage Account** if you want to allow the broker to create storage account.
 
-  1. For `Database Driver`, please select type of database you wish to use to store broker''s state between `MsSQL` and `MySQL`.
+  1. Enable **Allow Create File Share** if you want to allow the broker to create Azure file share.
 
-  1. (Optional) For `Database CACert`, enter the content of CA Cert to verify SSL connection.
+  1. Enable **Allow Delete Storage Account** if you want to allow the broker to deleet storage account.
 
-  1. (Optional) For `Host Name in Certificate`, enter the Common Name (CN) in the server certificate.
+  1. Enable **Allow Delete File Share** if you want to allow the broker to deleet Azure file share.
+
+  1. Click **Save**.
+
+##<a id='database'></a> Step 4: Service Broker Database Config
+
+  1. Select **Service Broker Database Config**.
+
+  1. For **Database Driver**, please select type of database you wish to use to store broker''s state between `MsSQL` and `MySQL`.
+
+  1. (Optional) For **Database CACert**, enter the content of CA Cert to verify SSL connection.
+
+  1. (Optional) For **Host Name in Certificate**, enter the Common Name (CN) in the server certificate.
      Enter one of below values to enable TLS encryption when using Azure SQL service, or Azure MySQL service.
-      - For AzureCloud: *.database.windows.net
-      - For AzureUSGovernment: *.database.usgovcloudapi.net
-      - For AzureChinaCloud: *.database.chinacloudapi.cn
-      - For AzureGermanCloud: *.database.cloudapi.de
+      - For AzureCloud: `*.database.windows.net`
+      - For AzureUSGovernment: `*.database.usgovcloudapi.net`
+      - For AzureChinaCloud: `*.database.chinacloudapi.cn`
+      - For AzureGermanCloud: `*.database.cloudapi.de`
 
-  <p class="note"><strong>Note</strong>: If either `Database CACert` or `Host Name in Certificate` is set, connections to database will be forced to use SSL </p>
+    <p class="note"><strong>Note</strong>: If either <strong>Database CACert</strong> or <strong>Host Name in Certificate</strong> is set, connections to database will be forced to use SSL </p>
 
-  1. Configure `Database Type`:
+  1. You can configure **SMB Volume Service** to use database service instance inside Cloud Foundry, or to use an external database with the config of **Database Type**.
 
-  <p class="note"><strong>Note</strong>: This setting will be frozen after first deployment. </p>
+    <p class="note"><strong>Note</strong>: This setting will be frozen after first deployment.</p>
 
-    1. To use database service provided by another service broker, please select `Cloud Foundry Service`.
-       For `Cloud Foundry Service Name`, enter the service name in VCAP_SERVICES where broker should find database credentials. It must be set to the service name for the database service as seen in `cf marketplace` which you want to bind to this broker. If you want to use an Azure SQL service, please reference this [guidance](https://github.com/cloudfoundry/smb-volume-release#way-1-cf-push-the-broker).
+    <p class="note"><strong>Note</strong>: If you are performing an upgrade, do not modify your existing internal database configuration or you may lose data. You must migrate your existing data first before changing the configuration. </p>
 
-    1. To use existing database service, please select `Existing External Database`.
+###<a id='database-service'></a> Use Database Service inside Cloud Foundry
 
-      1. For `Database Hostname`, enter the hostname for the database.
+  1. To use database service provided by another service broker, select `Cloud Foundry Service` for **Database Type**.
 
-      1. For `Database Port`, enter the port for the database.
+  1. For **Cloud Foundry Service Name**, enter the service name in VCAP_SERVICES where broker should find database credentials. 
 
-      1. For `Database Name`, enter the name for the database.
+    <p class="note"><strong>Note</strong>: It must be set to the service name for the database service as seen in `cf marketplace` which you want to bind to this broker. If you want to use an Azure SQL service, please reference this [guidance](https://github.com/cloudfoundry/smb-volume-release#way-1-cf-push-the-broker).</p>
 
-      1. For `Database Username`, enter the username for the database.
+  1. Click **Save**.
 
-      1. For `Database Password`, enter the password for the database.
+###<a id='database-external'></a> Use External Database
 
-  1. Click `Save`.
+  1. To use external database service, please select `Existing External Database` for **Database Type**.
 
-1. `Service Broker Bind Config`:
+  1. For **Database Hostname**, enter the hostname for the database.
 
-  1. For `Allowed Options`, enter a comma separated list of parameters allowed to be set in during bind operations.
-     Except `share`, and `mount`, others parameters here must also be in the list of `Mount Flag Allowed` in `SMB Driver Config`.
+  1. For **Database Port**, enter the port for the database.
 
-  1. For `Default Options`, enter a comma separated list of default parameter values specified as `param:value`. 
+  1. For **Database Name**, enter the name for the database.
+
+  1. For **Database Username**, enter the username for the database.
+
+  1. For **Database Password**, enter the password for the database.
+
+  1. Click **Save**.
+
+##<a id='bind'></a> Step 5: (Optional) Service Broker Bind Config
+
+  1. Select **Service Broker Bind Config**.
+
+  1. For **Allowed Options**, enter a comma separated list of parameters allowed to be set during bind operations. 
+
+    <p class="note"><strong>Note</strong>: Except <code>share</code>, and <code>mount</code>, other parameters here must also be in the list of <strong>Mount Flag Allowed</strong> in <strong>SMB Driver Config</strong>.</p>
+
+  1. For **Default Options**, enter a comma separated list of default parameter default values in the format of `param:value`. 
   
-  <p class="note"><strong>Note</strong>: If a parameter has a default value, while it is not in the `Allowed Options` list, then its default value becomes a fixed value that cannot be overridden.</p>
+    <p class="note"><strong>Note</strong>: If a parameter has a default value, while it is not in the <strong>Allowed Options</strong> list, then its default value becomes a fixed value that cannot be overridden.</p>
 
-  1. Click `Save`.
+  1. Click **Save**.
 
-1. `SMB Driver Config`:
+##<a id='driver'></a> Step 6: (Optional) SMB Driver Config
 
-  1. For `Mount Flag Allowed`, enter a comma separted list of parameters allowed to be send in extra config. Each of this parameters can be specify by brokers.
+  1. Select **SMB Driver Config**.
 
-  1. For `Mount Flag Default`, enter a comma separted list of like params:value. This list specifies default value of parameters.
+  1. For **Mount Flag Allowed**, enter a comma separted list of parameters allowed to be set in extra config. Each parameter here will be allowed to be specified by brokers.
 
-  1. Click `Save`.
+  1. For **Mount Flag Default**, enter a comma separted list of default values for parameters in the format of `params:value`.
 
-1. `Service Access`
+  1. Click **Save**.
 
-  1. Enable `Enable Global access to all Services and Plans` if you want all orgs and spaces to be allowed to access service plans provided by this broker;
+##<a id='access'></a> Step 7: (Optional) Configure Service Access
 
-  1. Click `Save`.
+  1. Select **Service Access**.
 
-1. Return to the `Ops Manager` Installation Dashboard and click `Apply changes` to install SMB Volume Service tile.
+  1. Enable **Enable Global access to all Services and Plans** if you want all orgs and spaces to be allowed to access service plans provided by this broker;
+
+  1. Click **Save**.
+
+##<a id='access'></a> Step 8: Configure Stemcell
+
+  1. Select **Stemcell**.
+
+  1. Verify that the version indicated in the filename matches the version of stemcell required by **SMB Volume Service**.
+
+      1. If PAS detects that a stemcell `.tgz` file is present in the **Ops Manager Director VM** at `/var/tempest/stemcells/`, the Stemcell screen displays filename information and it''s ready to proceed.
+
+      1. Otherwise please download stemcell of required version for your IaaS from [Pivotal Network](http://network.pivotal.io/).
+
+        1. Login to **Pivotal Network** and click **Stemcells**.
+
+        1. Download stemcell of appropriate version targeted for your IaaS.
+
+        1. In the **Stemcell** section of **SMB Volume Service** tile, click **Import Stemcell** to import the `.tgz` stemcell you just downloaded.
+
+##<a id='deploy'></a> Step 9: Complete Installation
+
+  1. Click the **Installation Dashboard** link to return to the Installation Dashboard.
+
+  1. Check the status of the tile **SMB Volume Service**. If its underlying status bar shows red, you might have missed some required settings.
+
+  1. Click **Apply changes** to install SMB Volume Service tile.
