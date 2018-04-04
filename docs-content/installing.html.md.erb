@@ -17,17 +17,17 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
 ##<a id='network'></a> Step 2: Assign Networks
 
-  1. Select **Assign Networks**.
+  1. Click **Assign Networks**.
 
-  1. Please assign a network for **SMB Volume Service** to use. _Network `Deployment` is recommended._
+  1. Sssign a network for **SMB Volume Service**.
 
   1. Click **Save**.
 
 ##<a id='broker'></a> Step 3: Service Broker Application Config Using Preexisting Shares Only
 
-1. Select **Service Broker Application**.
+1. Click **Service Broker Application**.
 
-1. Select **Log Level** by your demand, allowed values includes `error`, `warn`, `info` and `debug`.
+1. Select **Log Level** per your preference.
 
 1. You can configure this service broker to use preexisting SMB shares only or allow it to use Azure File Service by the configuration of **Share Environment**.
 
@@ -35,7 +35,7 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
 ###<a id='broker-preexisting'></a> Use Preexisting Shares Only
 
-  1. To configure the broker to use preexisting SMB shares only, select `Preexisting SMB shares` for **Share Environment**.
+  1. To user the pre-existing SMB share only, select `Preexisting SMB shares` for **Share Environment**.
 
     <p class="note"><strong>Note</strong>: You can still create Azure file shares manually and use them as <strong>Preexisting SMB shares</strong> in this mode.</p>
 
@@ -69,14 +69,14 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
 ##<a id='database'></a> Step 4: Service Broker Database Config
 
-  1. Select **Service Broker Database Config**.
+  1. Click **Service Broker Database Config**.
 
-  1. For **Database Driver**, please select type of database you wish to use to store broker''s state between `MsSQL` and `MySQL`.
+  1. For **Database Driver**, select the database type for the broker''s state, "MSSQL" or "MySQL".
 
   1. (Optional) For **Database CACert**, enter the content of CA Cert to verify SSL connection.
 
   1. (Optional) For **Host Name in Certificate**, enter the Common Name (CN) in the server certificate.
-     Enter one of below values to enable TLS encryption when using Azure SQL service, or Azure MySQL service.
+     Enter one of below values to enable TLS encryption when using both Azure SQL service, and Azure MySQL service.
       - For AzureCloud: `*.database.windows.net`
       - For AzureUSGovernment: `*.database.usgovcloudapi.net`
       - For AzureChinaCloud: `*.database.chinacloudapi.cn`
@@ -118,23 +118,23 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
 ##<a id='bind'></a> Step 5: (Optional) Service Broker Bind Config
 
-  1. Select **Service Broker Bind Config**.
+  1. Click **Service Broker Bind Config**.
 
-  1. For **Allowed Options**, enter a comma separated list of parameters allowed to be set during bind operations. 
+  1. For **Allowed Options**, enter a comma separated list of parameters that is allowed during service binding. 
 
     <p class="note"><strong>Note</strong>: Except <code>share</code>, and <code>mount</code>, other parameters here must also be in the list of <strong>Mount Flag Allowed</strong> in <strong>SMB Driver Config</strong>.</p>
 
-  1. For **Default Options**, enter a comma separated list of default parameter default values in the format of `param:value`. 
+  1. For **Default Options**, enter a comma separated list of default parameter and value in the format of `param:value`. 
   
-    <p class="note"><strong>Note</strong>: If a parameter has a default value, while it is not in the <strong>Allowed Options</strong> list, then its default value becomes a fixed value that cannot be overridden.</p>
+    <p class="note"><strong>Note</strong>: If a parameter has a default value, while it is not in the <strong>Allowed Options</strong> list, then this value becomes a fixed value that cannot be overridden.</p>
 
   1. Click **Save**.
 
 ##<a id='driver'></a> Step 6: (Optional) SMB Driver Config
 
-  1. Select **SMB Driver Config**.
+  1. Click **SMB Driver Config**.
 
-  1. For **Mount Flag Allowed**, enter a comma separted list of parameters allowed to be set in extra config. Each parameter here will be allowed to be specified by brokers.
+  1. For **Mount Flag Allowed**, enter a comma separated list of parameters to be set in the extra config. Each parameter here will be allowed to be specified by brokers.
 
   1. For **Mount Flag Default**, enter a comma separted list of default values for parameters in the format of `params:value`.
 
@@ -142,21 +142,21 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
 ##<a id='access'></a> Step 7: (Optional) Configure Service Access
 
-  1. Select **Service Access**.
+  1. Click **Service Access**.
 
-  1. Enable **Enable Global access to all Services and Plans** if you want all orgs and spaces to be allowed to access service plans provided by this broker;
+  1. Enable **Enable Global access to all Services and Plans** if you plan to give access to all orgs and spaces;
 
   1. Click **Save**.
 
 ##<a id='access'></a> Step 8: Configure Stemcell
 
-  1. Select **Stemcell**.
+  1. Click **Stemcell**.
 
   1. Verify that the version indicated in the filename matches the version of stemcell required by **SMB Volume Service**.
 
       1. If PAS detects that a stemcell `.tgz` file is present in the **Ops Manager Director VM** at `/var/tempest/stemcells/`, the Stemcell screen displays filename information and it''s ready to proceed.
 
-      1. Otherwise please download stemcell of required version for your IaaS from [Pivotal Network](http://network.pivotal.io/).
+      1. If the stemcell is not detected, it needs to be downloaded from from [Pivotal Network](http://network.pivotal.io/).
 
         1. Login to **Pivotal Network** and click **Stemcells**.
 
@@ -168,6 +168,6 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
   1. Click the **Installation Dashboard** link to return to the Installation Dashboard.
 
-  1. Check the status of the tile **SMB Volume Service**. If its underlying status bar shows red, you might have missed some required settings.
+  1. Check the status of the tile **SMB Volume Service**. If the status bar is green, you are ready for next step.
 
   1. Click **Apply changes** to install SMB Volume Service tile.
