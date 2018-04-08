@@ -7,7 +7,7 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
 ##<a id='prepare'></a> Step 1: Add SMB Volume Service to Ops Manager
 
-1. Download the product file from Pivotal Network.
+1. Download the product file `smb-volume-service-x.x.x.pivotal` from Pivotal Network.
 
 1. Navigate to the Ops Manager Installation Dashboard and click **Import a Product** to upload the product file. 
 
@@ -19,7 +19,7 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
   1. Click **Assign Networks**.
 
-  1. Sssign a network for **SMB Volume Service**.
+  1. Assign a network for **SMB Volume Service**.
 
   1. Click **Save**.
 
@@ -29,13 +29,13 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
 1. Select **Log Level** per your preference.
 
-1. You can configure this service broker to use preexisting SMB shares only or allow it to use Azure File Service by the configuration of **Share Environment**.
+1. Select file system provider environment by the configuration of **Share Environment**.
 
-  <p class="note"><strong>Note</strong>: This setting will be frozen after first deployment.</p>
+  <p class="warn"><strong>Warning</strong>: This setting cannot be changed once deployment is done.</p>
 
 ###<a id='broker-preexisting'></a> Use Preexisting Shares Only
 
-  1. To user the pre-existing SMB share only, select `Preexisting SMB shares` for **Share Environment**.
+  1. To use pre-existing SMB share only, select `Preexisting SMB shares` for **Share Environment**.
 
     <p class="note"><strong>Note</strong>: You can still create Azure file shares manually and use them as <strong>Preexisting SMB shares</strong> in this mode.</p>
 
@@ -86,9 +86,9 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
   1. You can configure **SMB Volume Service** to use database service instance inside Cloud Foundry, or to use an external database with the config of **Database Type**.
 
-    <p class="note"><strong>Note</strong>: This setting will be frozen after first deployment.</p>
+    <p class="warn"><strong>Warning</strong>: This setting cannot be changed once deployment is done. </p>
 
-    <p class="note"><strong>Note</strong>: If you are performing an upgrade, do not modify your existing internal database configuration or you may lose data. You must migrate your existing data first before changing the configuration. </p>
+    <p class="note"><strong>Note</strong>: If you are performing an upgrade that changes databases, do not modify your existing database configuration without migration or you may lose data. You must migrate your existing data first before applyinging new configuration. </p>
 
 ###<a id='database-service'></a> Use Database Service inside Cloud Foundry
 
@@ -126,7 +126,7 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
   1. For **Default Options**, enter a comma separated list of default parameter and value in the format of `param:value`. 
   
-    <p class="note"><strong>Note</strong>: If a parameter has a default value, while it is not in the <strong>Allowed Options</strong> list, then this value becomes a fixed value that cannot be overridden.</p>
+    <p class="note"><strong>Note</strong>: If a parameter has a default value, and is not in the <strong>Allowed Options</strong> list, then this value becomes a fixed value that cannot be overridden.</p>
 
   1. Click **Save**.
 
@@ -152,7 +152,7 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
   1. Click **Stemcell**.
 
-  1. Verify that the version indicated in the filename matches the version of stemcell required by **SMB Volume Service**.
+  1. If there is red notification indicating that stemcell required by **SMB Volume Service** is missing, a specific stemcell package should be imported.
 
       1. If PAS detects that a stemcell `.tgz` file is present in the **Ops Manager Director VM** at `/var/tempest/stemcells/`, the Stemcell screen displays filename information and it''s ready to proceed.
 
@@ -160,7 +160,7 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
         1. Login to **Pivotal Network** and click **Stemcells**.
 
-        1. Download stemcell of appropriate version targeted for your IaaS.
+        1. Download stemcell of required version (as shown in the **Stemcell** page of this tile) targeted for your IaaS.
 
         1. In the **Stemcell** section of **SMB Volume Service** tile, click **Import Stemcell** to import the `.tgz` stemcell you just downloaded.
 
