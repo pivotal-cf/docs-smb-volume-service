@@ -19,6 +19,8 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
   1. Click **Assign Networks**.
 
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/network.jpg") %>
+
   1. Assign a network for **SMB Volume Service**.
 
   1. Click **Save**.
@@ -26,6 +28,8 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 ##<a id='broker'></a> Step 3: Service Broker Application Config Using Preexisting Shares Only
 
 1. Click **Service Broker Application**.
+
+  <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-application.jpg") %>
 
 1. Select **Log Level** per your preference.
 
@@ -37,6 +41,8 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
   1. To use pre-existing SMB share only, select `Preexisting SMB shares` for **Share Environment**.
 
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-application-existing.jpg") %>
+
     <p class="note"><strong>Note</strong>: You can still create Azure file shares manually and use them as <strong>Preexisting SMB shares</strong> in this mode.</p>
 
   1. Click **Save**.
@@ -44,6 +50,8 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 ###<a id='broker-azurefile'></a> Allow Azure File Service
 
   1. To allow the broker to use Azure File Service, select `Azure File Share` for **Share Environment**.
+
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-application-azure.jpg") %>
 
   1. For **Tenant ID**, enter the tenant id of your Azure service principal.
 
@@ -61,15 +69,17 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
   1. Enable **Allow Create File Share** if you want to allow the broker to create Azure file share.
 
-  1. Enable **Allow Delete Storage Account** if you want to allow the broker to deleet storage account.
+  1. Enable **Allow Delete Storage Account** if you want to allow the broker to delete storage account.
 
-  1. Enable **Allow Delete File Share** if you want to allow the broker to deleet Azure file share.
+  1. Enable **Allow Delete File Share** if you want to allow the broker to delete Azure file share.
 
   1. Click **Save**.
 
 ##<a id='database'></a> Step 4: Service Broker Database Config
 
   1. Click **Service Broker Database Config**.
+
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-database.jpg") %>
 
   1. For **Database Driver**, select the database type for the broker''s state, "MSSQL" or "MySQL".
 
@@ -88,13 +98,15 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
     <p class="warn"><strong>Warning</strong>: This setting cannot be changed once deployment is done. </p>
 
-    <p class="note"><strong>Note</strong>: If you are performing an upgrade that changes databases, do not modify your existing database configuration without migration or you may lose data. You must migrate your existing data first before applyinging new configuration. </p>
+    <p class="note"><strong>Note</strong>: If you are performing an upgrade that changes databases, do not modify your existing database configuration without migration or you may lose data. You must migrate your existing data first before applying new configuration. </p>
 
 ###<a id='database-service'></a> Use Database Service inside Cloud Foundry
 
   1. To use database service provided by another service broker, select `Cloud Foundry Service` for **Database Type**.
 
-  1. For **Cloud Foundry Service Name**, enter the service name in VCAP_SERVICES where broker should find database credentials. 
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-database-service.jpg") %>
+
+  1. For **Cloud Foundry Service Name**, enter the service name in `VCAP_SERVICES` where broker should find database credentials.
 
     <p class="note"><strong>Note</strong>: It must be set to the service name for the database service as seen in `cf marketplace` which you want to bind to this broker. If you want to use an Azure SQL service, please reference this [guidance](https://github.com/cloudfoundry/smb-volume-release#way-1-cf-push-the-broker).</p>
 
@@ -103,6 +115,8 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 ###<a id='database-external'></a> Use External Database
 
   1. To use external database service, please select `Existing External Database` for **Database Type**.
+
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-database-external.jpg") %>
 
   1. For **Database Hostname**, enter the hostname for the database.
 
@@ -120,12 +134,14 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
   1. Click **Service Broker Bind Config**.
 
-  1. For **Allowed Options**, enter a comma separated list of parameters that is allowed during service binding. 
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-bind.jpg") %>
+
+  1. For **Allowed Options**, enter a comma separated list of parameters that is allowed during service binding.
 
     <p class="note"><strong>Note</strong>: Except <code>share</code>, and <code>mount</code>, other parameters here must also be in the list of <strong>Mount Flag Allowed</strong> in <strong>SMB Driver Config</strong>.</p>
 
-  1. For **Default Options**, enter a comma separated list of default parameter and value in the format of `param:value`. 
-  
+  1. For **Default Options**, enter a comma separated list of default parameter and value in the format of `param:value`.
+
     <p class="note"><strong>Note</strong>: If a parameter has a default value, and is not in the <strong>Allowed Options</strong> list, then this value becomes a fixed value that cannot be overridden.</p>
 
   1. Click **Save**.
@@ -133,6 +149,8 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 ##<a id='driver'></a> Step 6: (Optional) SMB Driver Config
 
   1. Click **SMB Driver Config**.
+
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/smb-driver.jpg") %>
 
   1. For **Mount Flag Allowed**, enter a comma separated list of parameters to be set in the extra config. Each parameter here will be allowed to be specified by brokers.
 
@@ -144,13 +162,17 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
   1. Click **Service Access**.
 
-  1. Enable **Enable Global access to all Services and Plans** if you plan to give access to all orgs and spaces;
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-access.jpg") %>
+
+  1. Enable **Enable Global access to all Services and Plans** if you plan to give access to all organizations and spaces;
 
   1. Click **Save**.
 
 ##<a id='access'></a> Step 8: Configure Stemcell
 
   1. Click **Stemcell**.
+
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/stemcell.jpg") %>
 
   1. If there is red notification indicating that stemcell required by **SMB Volume Service** is missing, a specific stemcell package should be imported.
 
@@ -169,5 +191,7 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
   1. Click the **Installation Dashboard** link to return to the Installation Dashboard.
 
   1. Check the status of the tile **SMB Volume Service**. If the status bar is green, you are ready for next step.
+
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/tile-ready.jpg") %>
 
   1. Click **Apply changes** to install SMB Volume Service tile.
