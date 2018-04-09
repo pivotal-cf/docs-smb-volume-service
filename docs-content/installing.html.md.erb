@@ -1,28 +1,197 @@
 ---
-title: Installing and Configuring YOUR-PRODUCT-NAME
+title: Installing and Configuring SMB Volume Service for PCF
 owner: Partners
 ---
 
-This topic describes how to install and configure YOUR-PRODUCT-NAME.
+This topic describes how to install and configure **SMB Volume Service for PCF**.
 
-##<a id='install'></a> Install and Configure YOUR-PRODUCT-NAME
+##<a id='prepare'></a> Step 1: Add SMB Volume Service to Ops Manager
 
-1. Download the product file from Pivotal Network.
+1. Download the product file `smb-volume-service-x.x.x.pivotal` from Pivotal Network.
 
 1. Navigate to the Ops Manager Installation Dashboard and click **Import a Product** to upload the product file. 
 
-1. Under the **Import a Product** button, click **+** next to the version number of YOUR-PRODUCT-NAME. 
-This adds the tile to your staging area.
+1. Under the **Import a Product** button, click **+** next to the version number of **SMB Volume Service**. This adds the tile to your staging area.
 
-1. Click the newly added **YOUR-PRODUCT-NAME** tile.
+1. Click the newly added **SMB Volume Service** tile.
 
-1. **This portion of the procedure should tell the users how to configure the newly added tile by
-walking them through the sections. Which fields should they fill out? What are the different
-checkboxes? Include relevant screenshots here.** 
+##<a id='network'></a> Step 2: Assign Networks
 
-1. Click **Save**.
+  1. Click **Assign Networks**.
 
-1. Return to the Ops Manager Installation Dashboard and click **Apply changes** to install YOUR-PRODUCT-NAME tile.
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/network.jpg") %>
 
-**If needed, include additional configuration information below. For example, maybe there are
-configuration options not required for installation but which could be useful for certain users.**
+  1. Assign a network for **SMB Volume Service**.
+
+  1. Click **Save**.
+
+##<a id='broker'></a> Step 3: Service Broker Application Config Using Preexisting Shares Only
+
+1. Click **Service Broker Application**.
+
+  <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-application.jpg") %>
+
+1. Select **Log Level** per your preference.
+
+1. Select file system provider environment by the configuration of **Share Environment**.
+
+  <p class="warn"><strong>Warning</strong>: This setting cannot be changed once deployment is done.</p>
+
+###<a id='broker-preexisting'></a> Use Preexisting Shares Only
+
+  1. To use pre-existing SMB share only, select `Preexisting SMB shares` for **Share Environment**.
+
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-application-existing.jpg") %>
+
+    <p class="note"><strong>Note</strong>: You can still create Azure file shares manually and use them as <strong>Preexisting SMB shares</strong> in this mode.</p>
+
+  1. Click **Save**.
+
+###<a id='broker-azurefile'></a> Allow Azure File Service
+
+  1. To allow the broker to use Azure File Service, select `Azure File Share` for **Share Environment**.
+
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-application-azure.jpg") %>
+
+  1. For **Tenant ID**, enter the tenant id of your Azure service principal.
+
+  1. For **Client ID**, enter the client id of your Azure service principal.
+
+  1. For **Client Secret**, enter the client secret of your Azure service principal.
+
+  1. For **Default Subsctiption ID**, enter the default Azure Subscription id to use for storage accounts.
+
+  1. For **Default Resource Group Name**, enter the default resource group name to use for storage accounts.
+
+  1. For **Default Location**, enter the location to use for creating storage accounts.
+
+  1. Enable **Allow Create Storage Account** if you want to allow the broker to create storage account.
+
+  1. Enable **Allow Create File Share** if you want to allow the broker to create Azure file share.
+
+  1. Enable **Allow Delete Storage Account** if you want to allow the broker to delete storage account.
+
+  1. Enable **Allow Delete File Share** if you want to allow the broker to delete Azure file share.
+
+  1. Click **Save**.
+
+##<a id='database'></a> Step 4: Service Broker Database Config
+
+  1. Click **Service Broker Database Config**.
+
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-database.jpg") %>
+
+  1. For **Database Driver**, select the database type for the broker''s state, "MSSQL"(Microsoft SQL) or "MySQL".
+
+  1. (Optional) For **Database CACert**, enter the content of CA Cert to verify SSL connection.
+
+  1. (Optional) For **Host Name in Certificate**, enter the Common Name (CN) in the server certificate.
+     Enter one of below values to enable TLS encryption when using both Azure SQL service, and Azure MySQL service.
+      - For AzureCloud: `*.database.windows.net`
+      - For AzureUSGovernment: `*.database.usgovcloudapi.net`
+      - For AzureChinaCloud: `*.database.chinacloudapi.cn`
+      - For AzureGermanCloud: `*.database.cloudapi.de`
+
+    <p class="note"><strong>Note</strong>: If either <strong>Database CACert</strong> or <strong>Host Name in Certificate</strong> is set, connections to database will be forced to use SSL </p>
+
+  1. You can configure **SMB Volume Service** to use database service instance provided by CF service brokers, or to use an existing external database directly with the config of **Database Type**.
+
+    <p class="warn"><strong>Warning</strong>: This setting cannot be changed once deployment is done. </p>
+
+    <p class="note"><strong>Note</strong>: If you are performing an upgrade that changes databases, do not modify your existing database configuration without migration or you may lose data. You must migrate your existing data first before applying new configuration. </p>
+
+###<a id='database-service'></a> Use Database Service Provided by Service Brokers
+
+  1. To use database service provided by another service broker, select `Cloud Foundry Service` for **Database Type**.
+
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-database-service.jpg") %>
+
+  1. For **Cloud Foundry Service Name**, enter the service name in `VCAP_SERVICES` where broker should find database credentials.
+
+    <p class="note"><strong>Note</strong>: It must be set to the service name for the database service as seen in `cf marketplace` which you want to bind to this broker. If you want to use an Azure SQL service, please reference this [guidance](https://github.com/cloudfoundry/smb-volume-release#way-1-cf-push-the-broker).</p>
+
+  1. Click **Save**.
+
+###<a id='database-external'></a> Use Existing External Database Directly
+
+  1. To use database service directly without service broker, please select `Existing External Database` for **Database Type**.
+
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-database-external.jpg") %>
+
+  1. For **Database Hostname**, enter the hostname for the database.
+
+  1. For **Database Port**, enter the port for the database.
+
+  1. For **Database Name**, enter the name for the database.
+
+  1. For **Database Username**, enter the username for the database.
+
+  1. For **Database Password**, enter the password for the database.
+
+  1. Click **Save**.
+
+##<a id='bind'></a> Step 5: (Optional) Service Broker Bind Config
+
+  1. Click **Service Broker Bind Config**.
+
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-bind.jpg") %>
+
+  1. For **Allowed Options**, enter a comma separated list of parameters that is allowed during service binding.
+
+    <p class="note"><strong>Note</strong>: Except <code>share</code>, and <code>mount</code>, other parameters here must also be in the list of <strong>Mount Flag Allowed</strong> in <strong>SMB Driver Config</strong>.</p>
+
+  1. For **Default Options**, enter a comma separated list of default parameter and value in the format of `param:value`.
+
+    <p class="note"><strong>Note</strong>: If a parameter has a default value, and is not in the <strong>Allowed Options</strong> list, then this value becomes a fixed value that cannot be overridden.</p>
+
+  1. Click **Save**.
+
+##<a id='driver'></a> Step 6: (Optional) SMB Driver Config
+
+  1. Click **SMB Driver Config**.
+
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/smb-driver.jpg") %>
+
+  1. For **Mount Flag Allowed**, enter a comma separated list of parameters to be set in the extra config. Each parameter here will be allowed to be specified by brokers.
+
+  1. For **Mount Flag Default**, enter a comma separted list of default values for parameters in the format of `params:value`.
+
+  1. Click **Save**.
+
+##<a id='access'></a> Step 7: (Optional) Configure Service Access
+
+  1. Click **Service Access**.
+
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-access.jpg") %>
+
+  1. Enable **Enable Global access to all Services and Plans** if you plan to give access to all organizations and spaces;
+
+  1. Click **Save**.
+
+##<a id='access'></a> Step 8: Configure Stemcell
+
+  1. Click **Stemcell**.
+
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/stemcell.jpg") %>
+
+  1. If there is red notification indicating that stemcell required by **SMB Volume Service** is missing, a specific stemcell package should be imported.
+
+      1. If PAS detects that a stemcell `.tgz` file is present in the **Ops Manager Director VM** at `/var/tempest/stemcells/`, the Stemcell screen displays filename information and it''s ready to proceed.
+
+      1. If the stemcell is not detected, it needs to be downloaded from from [Pivotal Network](http://network.pivotal.io/).
+
+        1. Login to **Pivotal Network** and click **Stemcells**.
+
+        1. Download stemcell of required version (as shown in the **Stemcell** page of this tile) targeted for your IaaS.
+
+        1. In the **Stemcell** section of **SMB Volume Service** tile, click **Import Stemcell** to import the `.tgz` stemcell you just downloaded.
+
+##<a id='deploy'></a> Step 9: Complete Installation
+
+  1. Click the **Installation Dashboard** link to return to the Installation Dashboard.
+
+  1. Check the status of the tile **SMB Volume Service**. If the status bar is green, you are ready for next step.
+
+    <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/tile-ready.jpg") %>
+
+  1. Click **Apply changes** to install SMB Volume Service tile.
