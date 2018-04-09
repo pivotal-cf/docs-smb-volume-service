@@ -81,7 +81,7 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
     <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-database.jpg") %>
 
-  1. For **Database Driver**, select the database type for the broker''s state, "MSSQL" or "MySQL".
+  1. For **Database Driver**, select the database type for the broker''s state, "MSSQL"(Microsoft SQL) or "MySQL".
 
   1. (Optional) For **Database CACert**, enter the content of CA Cert to verify SSL connection.
 
@@ -94,13 +94,13 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
     <p class="note"><strong>Note</strong>: If either <strong>Database CACert</strong> or <strong>Host Name in Certificate</strong> is set, connections to database will be forced to use SSL </p>
 
-  1. You can configure **SMB Volume Service** to use database service instance inside Cloud Foundry, or to use an external database with the config of **Database Type**.
+  1. You can configure **SMB Volume Service** to use database service instance provided by CF service brokers, or to use an existing external database directly with the config of **Database Type**.
 
     <p class="warn"><strong>Warning</strong>: This setting cannot be changed once deployment is done. </p>
 
     <p class="note"><strong>Note</strong>: If you are performing an upgrade that changes databases, do not modify your existing database configuration without migration or you may lose data. You must migrate your existing data first before applying new configuration. </p>
 
-###<a id='database-service'></a> Use Database Service inside Cloud Foundry
+###<a id='database-service'></a> Use Database Service Provided by Service Brokers
 
   1. To use database service provided by another service broker, select `Cloud Foundry Service` for **Database Type**.
 
@@ -112,9 +112,9 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
   1. Click **Save**.
 
-###<a id='database-external'></a> Use External Database
+###<a id='database-external'></a> Use Existing External Database Directly
 
-  1. To use external database service, please select `Existing External Database` for **Database Type**.
+  1. To use database service directly without service broker, please select `Existing External Database` for **Database Type**.
 
     <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-database-external.jpg") %>
 
