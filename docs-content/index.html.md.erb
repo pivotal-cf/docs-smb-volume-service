@@ -3,11 +3,8 @@ title: SMB Volume Service for PCF (Beta)
 owner: Partners
 ---
 
-<p class="note warning">
-<strong>WARNING! </strong>
-The SMB Volume Service for PCF tile is currently in beta and is intended for evaluation and test purposes only. 
-Do not use this product in a PCF production environment.
-</p>
+<p class="note warning"><strong>WARNING:</strong> The SMB Volume Service for PCF tile is currently in beta and is intended for evaluation and test purposes only. 
+Do not use this product in a PCF production environment.</p>
 
 ## <a id='overview'></a>Overview
 
@@ -16,7 +13,7 @@ Shared Volumes are distributed file systems that allow instances of an applicati
 The Shared Volume Service for SMB enables SMB driver support, so Azure file service and SMB shared folders can be used by the Shared Volume Service.
 
 The SMB Volume Service Broker for PCF exposes the SMB service in the Marketplace. 
-It installs SMB driver in every Diego cell, provides credentials, and the SMB share URL for cloud controller to mount 
+It installs SMB driver in every Diego cell, provides credentials, and the SMB share URL for Cloud Controller to mount 
 SMB shares in a Diego cell. An application can bind to the service to use persistent SMB storage, such as Azure files.
 
 ## <a id='features'></a>Key Features
@@ -67,9 +64,8 @@ The following table provides version and version-support information about SMB V
 
 SMB Volume Service for PCF has the following requirements:
 
-+ A Microsoft SQL, or MySQL database for storing the broker's status.
-
-+ Existing SMB shares if you only need to utilize SMB share, or Microsoft Azure Service Principal for provision of Azure File to be served as SMB shares.
+* A Microsoft SQL, or MySQL database for storing the broker's status.
+* Existing SMB shares if you only need to utilize SMB share, or Microsoft Azure Service Principal for provision of Azure File to be served as SMB shares.
 
 ## <a id="feedback"></a>Feedback
 
