@@ -1,4 +1,4 @@
----
+a---
 title: Release Notes for SMB Volume Service for PCF
 owner: Partners
 ---
@@ -12,9 +12,13 @@ These are release notes for SMB Volume Service for PCF.
 Features included in this release:
 
 * Ability to create a database service instance for `azurefilebroker`
-* Support for database service from `Open Service Broker Azure` and `MySQL for PCF v2`
+* Support for database service from `Open Service Broker Azure`* and `MySQL for PCF v2`
 * Pick up BOSH release version 0.2.3 for compilation errors on xenial stemcells for AWS and VSphere
 * Changes to the release itself can be found [here](https://github.com/cloudfoundry/smb-volume-release/releases)
+
+Known Issues:
+
+* As `Open Service Broker Azure` currently does not support parameter `Connection Policy` for SQL database while TLS is forced, you will not be able to use SQL database provided by OSBA until this issue is fixed. Details and tracks can be found [here](https://github.com/Azure/open-service-broker-azure/issues/646)
 
 ##<a id="ver"></a> v0.9.0
 
