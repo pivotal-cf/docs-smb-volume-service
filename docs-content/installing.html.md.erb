@@ -15,6 +15,7 @@ This document walks you through how to install and configure **SMB Volume Servic
     <p class="note"><strong>Note</strong>: We recommend `Standard` tier database for the broker, you could also adjust its tier and size based on your usage later.</p>  
   1. Create a database instance using CF service brokers, for example, [MySQL for PCF v2](https://network.pivotal.io/products/pivotal-mysql/) or [Meta Azure service broker](https://github.com/Azure/meta-azure-service-broker).  In this way, service broker used to provide the database should be installed before you start to install this tile. We will use the Meta Azure service broker MySQL service as an example in this document. Follow the instruction [here](https://docs.pivotal.io/partners/azure-sb/installing.html) to install the service broker.
     <p class="note"><strong>Note</strong>: As `Open Service Broker Azure` currently does not support parameter `Connection Policy` for SQL database while TLS is forced, you will not be able to use SQL database provided by OSBA until this issue is fixed. Details and tracks can be found [here](https://github.com/Azure/open-service-broker-azure/issues/646).</p>
+    <p class="warn"><strong>Warn</strong>: `Open Service Broker for Azure` is currently in **Beta**, do **NOT** use in production.</p>
 2.	If you plan to use Azure file service, prepare a service principal and a resource group. Then new SMB share service instances could be created with storage accounts (new or existing), requiring a service principle to access resource (Azure File Service provided by storage account) on Azure. You can either reuse an existing service principal or create a new one depending on how you want to manager the permissions. Document on how to create a new service principal can be found [here](https://github.com/cloudfoundry-incubator/bosh-azure-cpi-release/blob/master/docs/get-started/create-service-principal.md). Your storage account will be created under sprcified resource groups, while a resource group will be specified as default one. Creation and access permissions in these resource groups on storage account will be required for your service principal.
   <p class="warn"><strong>Warn</strong>: For security reasons, we recommend using different service principals with minimum permissions for each broker and BOSH.</p>
   <p class="note"><strong>Note</strong>: `Tenant ID`/`Tenant`, `Client ID`/`App ID` and `Client Secret`/`Password` of your service principal and the ID for your default resource group will be used in <a href='#broker-azurefile'>Allow Azure File Service</a> of Step 3.</p>
@@ -107,18 +108,20 @@ This document walks you through how to install and configure **SMB Volume Servic
 
 ###<a id='database-service'></a> Use Database Service Provided by Service Brokers
 
-1. To use a database service provided by another service broker, select **Cloud Foundry Service** for **Database Type**.<br>
+IF you choose to use a service broker to create the service database for `SMB Volume Service`, then during the installation, a database service instance will be created and bind to `SMB Volume Service`.
+
+1. To use a database service provided by a service broker, select **Cloud Foundry Service** for **Database Type**.<br>
   <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-database-service.jpg") %>
 
-1. For **Cloud Foundry Service Name**, enter the service name in `VCAP_SERVICES` where the broker should find database credentials.
-  <p class="note"><strong>Note:</strong> This must be set to the service name in `cf marketplace` for the database service that you want to bind to this broker. If you want to use an Azure SQL service, make sure you set its `Connection Policy` to `Proxy`.</p>
+1. For **Cloud Foundry Service Name**, enter the service name you choose to create the database instance, which can be retrived by command `cf marketplace`
+  <p class="note"><strong>Note:</strong> If you want to use an Azure SQL service, make sure you set its `Connection Policy` to `Proxy`.</p>
 
-1. For **Cloud Foundry Service Plan**, enter the service plan name to be created for this tile.
+1. For **Cloud Foundry Service Plan**, enter the service plan name for the database service instance.
    <p class="note"><strong>Note:</strong> You should be able to query all avaliable services and plans with CF CLI command `cf marketplace`.</p>
 
 1. For **Service Creation Parameters**, enter a JSON format object which will be used as parameter to create the database instance.
-   <p class="note"><strong>Note:</strong> For SQL database provided by `Meta Azure Service Broker`, this filed should be set to `{"sqlServerParameters":{"connectionPolicy":"Proxy"}}` to set its `Connection Policy` to `Proxy`.</p>
-   <p class="note"><strong>Note:</strong> For MySQL database provided by `Meta Azure Service Broker` or `Open Service Broker for Azure`, this filed should be set to `{"location":"LOCATION_WITH_GEN4_HARDWARE"}` to use regions with Gen4 hardware. Availabilities of Gen4 hardware can be found [here](https://docs.microsoft.com/en-us/azure/mysql/concepts-pricing-tiers#compute-generations-and-vcores)</p>
+   <p class="note"><strong>Note:</strong> For SQL database provided by `Meta Azure Service Broker`, this field should be set to `{"sqlServerParameters":{"connectionPolicy":"Proxy"}}` to set its `Connection Policy` to `Proxy`.</p>
+   <p class="note"><strong>Note:</strong> For MySQL database provided by `Meta Azure Service Broker`, this field should be set to `{"location":"LOCATION_WITH_GEN4_HARDWARE"}` to use regions with Gen4 hardware. Availabilities of Gen4 hardware can be found [here](https://docs.microsoft.com/en-us/azure/mysql/concepts-pricing-tiers#compute-generations-and-vcores)</p>
 
 1. Click **Save**.
 
