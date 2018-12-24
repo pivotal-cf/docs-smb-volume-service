@@ -3,13 +3,28 @@ title: Installing and Configuring SMB Volume Service for PCF
 owner: Partners
 ---
 
-This topic describes how to install and configure **SMB Volume Service for PCF**.
+This document walks you through how to install and configure **SMB Volume Service for PCF**.
 
-##<a id='prepare'></a> Step 1: Add SMB Volume Service to Ops Manager
+##<a id='prerequisite'></a> Prerequisite
 
-1. Download the product file `smb-volume-service-x.x.x.pivotal` from Pivotal Network.
+1. This tile includes a service broker, which will need a database to save mappings and other metadata about service instances. Both SQL and MySQL databases are supported. There are two options available to provide the database.
 
-1. Navigate to the Ops Manager Installation Dashboard and click **Import a Product** to upload the product file. 
+  1. Create a database manually or via script under your own control. For example, follow the instructions [here](https://docs.microsoft.com/en-us/azure/mysql/quickstart-create-mysql-server-database-using-azure-portal) to create a Azure MySQL database service. After the service is created, connect to the database service, create a database for the tile, then copy and save following information as these values will be used later to configure the service broker database:
+    1. `Server name`, `Server admin login`, `Password` in step 2 ([Create an Azure Database for MySQL server](https://docs.microsoft.com/en-us/azure/mysql/quickstart-create-mysql-server-database-using-azure-portal#create-an-azure-database-for-mysql-server))
+    1. The name of the database you created in step 5 ([`Connect to MySQL by using the mysql command-line tool`](https://docs.microsoft.com/en-us/azure/mysql/quickstart-create-mysql-server-database-using-azure-portal#connect-to-mysql-by-using-the-mysql-command-line-tool)). 
+    <p class="note"><strong>Note</strong>: We recommend `Standard` tier database for the broker, you could also adjust its tier and size based on your usage later.</p>  
+  1. Create a database instance using CF service brokers, for example, [MySQL for PCF v2](https://network.pivotal.io/products/pivotal-mysql/) or [Meta Azure service broker](https://github.com/Azure/meta-azure-service-broker).  In this way, service broker used to provide the database should be installed before you start to install this tile. We will use the Meta Azure service broker MySQL service as an example in this document. Follow the instruction [here](https://docs.pivotal.io/partners/azure-sb/installing.html) to install the service broker.
+    <p class="note"><strong>Note</strong>: As `Open Service Broker Azure` currently does not support parameter `Connection Policy` for SQL database while TLS is forced, you will not be able to use SQL database provided by OSBA until this issue is fixed. Details and tracks can be found [here](https://github.com/Azure/open-service-broker-azure/issues/646).</p>
+    <p class="warn"><strong>Warn</strong>: `Open Service Broker for Azure` is currently in **Beta**, do **NOT** use in production.</p>
+2.	If you plan to use Azure file service, prepare a service principal and a resource group. Then new SMB share service instances could be created with storage accounts (new or existing), requiring a service principle to access resource (Azure File Service provided by storage account) on Azure. You can either reuse an existing service principal or create a new one depending on how you want to manager the permissions. Document on how to create a new service principal can be found [here](https://github.com/cloudfoundry-incubator/bosh-azure-cpi-release/blob/master/docs/get-started/create-service-principal.md). Your storage account will be created under sprcified resource groups, while a resource group will be specified as default one. Creation and access permissions in these resource groups on storage account will be required for your service principal.
+  <p class="warn"><strong>Warn</strong>: For security reasons, we recommend using different service principals with minimum permissions for each broker and BOSH.</p>
+  <p class="note"><strong>Note</strong>: `Tenant ID`/`Tenant`, `Client ID`/`App ID` and `Client Secret`/`Password` of your service principal and the ID for your default resource group will be used in <a href='#broker-azurefile'>Allow Azure File Service</a> of Step 3.</p>
+
+##<a id='add-tile'></a> Step 1: Add SMB Volume Service to Ops Manager
+
+1. Download the product file `smb-volume-service-x.x.x.pivotal` from [Pivotal Network](https://network.pivotal.io/products/smb-volume-service/).
+
+1. Navigate to your Ops Manager `Installation Dashboard` and click **Import a Product** to upload the product file. 
 
 1. Under the **Import a Product** button, click **+** next to the version number of **SMB Volume Service**. This adds the tile to your staging area.
 
@@ -24,12 +39,12 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
 1. Click **Save**.
 
-##<a id='broker'></a> Step 3: Service Broker Application Config Using Preexisting Shares Only
+##<a id='broker'></a> Step 3: Service Broker Application Config
 
 1. Click **Service Broker Application**.
     <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-application.jpg") %>
 
-1. Select your desired **Log Level**.
+1. Select your desired **Log Level** per your preference.
 
 1. Select your file system provider environment with **Share Environment**.
   <p class="warn"><strong>Warning</strong>: This setting cannot be changed once deployment is done.</p>
@@ -42,22 +57,24 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
 1. Click **Save**.
 
-###<a id='broker-azurefile'></a> Allow Azure File Service
+###<a id='broker-azurefile'></a> Use Azure File Service
 
-1. To allow the broker to use Azure File Service, select **Azure File Share** for **Share Environment**.
+1. To enable the broker to use Azure File Service, select **Azure File Share** for **Share Environment**.
   <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-application-azure.jpg") %>
 
-1. For **Tenant ID**, enter the tenant ID of your Azure service principal.
+1. For **Tenant ID**, enter the `tenant ID` of your Azure service principal.
 
-1. For **Client ID**, enter the client ID of your Azure service principal.
+1. For **Client ID**, enter the `client ID`/`Application ID` of your Azure service principal.
 
-1. For **Client Secret**, enter the client secret of your Azure service principal.
+1. For **Client Secret**, enter the `client secret`/`password` of your Azure service principal.
 
 1. For **Default Subsctiption ID**, enter the default Azure Subscription ID to use for storage accounts.
+  <p class="note"><strong>Note</strong>: Ensure your service principal has permissions `Storage Account Contributor` and `Storage Account Key Operator Service Role` to this subscription.</p>
 
 1. For **Default Resource Group Name**, enter the default resource group name to use for storage accounts.
 
-1. For **Default Location**, enter the location to use for creating storage accounts.
+1. For **Default Location**, enter the location to use for creating storage accounts. For example, `eastus`.
+  <p class="note"><strong>Note</strong>: Resource group and location can be specified as parameters at the creation of new service instances, overriding default values here.</p>
 
 1. Enable **Allow Create Storage Account** if you want to allow the broker to create storage accounts.
 
@@ -76,7 +93,7 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
 1. For **Database Driver**, select the database type for the broker's state, **MSSQL** (Microsoft SQL) or **MySQL**.
 
-1. (Optional) For **Database CACert**, enter the content of CA Cert to verify your SSL connection.
+1. (Optional) For **Database CACert**, enter the content of CA Cert to verify your SSL connection. _Leave this empty if you are not using self-signed certificate for your database._
 
 1. (Optional) For **Host Name in Certificate**, enter the Common Name (CN) in the server certificate. Enter one of below values to enable TLS encryption when using both an Azure SQL service and an Azure MySQL service.
     - For AzureCloud: `*.database.windows.net`
@@ -85,21 +102,32 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
     - For AzureGermanCloud: `*.database.cloudapi.de`
   <p class="note"><strong>Note:</strong> If either <strong>Database CACert</strong> or <strong>Host Name in Certificate</strong> is set, connections to the database will be forced to use SSL.</p>
 
-1. You can configure **SMB Volume Service** to use a database service instance provided by CF service brokers, or to use an existing external database directly with the configuration of **Database Type**.
+1. You can configure **SMB Volume Service** to use a database service instance provided by CF service brokers, or to use an existing external database by **Database Type**.
   <p class="warn"><strong>WARNING:</strong> This setting cannot be changed once your deployment is done.</p>
   <p class="note"><strong>Note:</strong> If you are performing an upgrade that changes databases, do not modify your existing database configuration without migration or you may lose data. You must migrate your existing data first before applying new configurations.</p>
 
 ###<a id='database-service'></a> Use Database Service Provided by Service Brokers
 
-1. To use a database service provided by another service broker, select **Cloud Foundry Service** for **Database Type**.<br>
+IF you choose to use a service broker to create the service database for `SMB Volume Service`, then during the installation, a database service instance will be created and bind to `SMB Volume Service`.
+
+1. To use a database service provided by a service broker, select **Cloud Foundry Service** for **Database Type**.<br>
   <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-database-service.jpg") %>
 
-1. For **Cloud Foundry Service Name**, enter the service name in `VCAP_SERVICES` where the broker should find database credentials.
-  <p class="note"><strong>Note:</strong> This must be set to the service name in `cf marketplace` for the database service that you want to bind to this broker. If you want to use an Azure SQL service, see <a href="https://github.com/cloudfoundry/smb-volume-release#way-1-cf-push-the-broker">Guidance</a>.</p>
+1. For **Cloud Foundry Service Name**, enter the service name you choose to create the database instance, which can be retrived by command `cf marketplace`
+  <p class="note"><strong>Note:</strong> If you want to use an Azure SQL service, make sure you set its `Connection Policy` to `Proxy`.</p>
+
+1. For **Cloud Foundry Service Plan**, enter the service plan name for the database service instance.
+   <p class="note"><strong>Note:</strong> You should be able to query all avaliable services and plans with CF CLI command `cf marketplace`.</p>
+
+1. For **Service Creation Parameters**, enter a JSON format object which will be used as parameter to create the database instance.
+   <p class="note"><strong>Note:</strong> For SQL database provided by `Meta Azure Service Broker`, this field should be set to `{"sqlServerParameters":{"connectionPolicy":"Proxy"}}` to set its `Connection Policy` to `Proxy`.</p>
+   <p class="note"><strong>Note:</strong> For MySQL database provided by `Meta Azure Service Broker`, this field should be set to `{"location":"LOCATION_WITH_GEN4_HARDWARE"}` to use regions with Gen4 hardware. Availabilities of Gen4 hardware can be found [here](https://docs.microsoft.com/en-us/azure/mysql/concepts-pricing-tiers#compute-generations-and-vcores)</p>
 
 1. Click **Save**.
 
 ###<a id='database-external'></a> Use an Existing External Database Directly
+
+<p class="note"><strong>Note:</strong> If you choose this option, you should already created a database server consists of at least one database in Azure by yourself in step <a href="#prerequisite">Prerequisite</a>.</p>
 
 1. To use the database service directly without the service broker, please select **Existing External Database** for **Database Type**.<br>
   <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-database-external.jpg") %>
@@ -117,6 +145,8 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 1. Click **Save**.
 
 ##<a id='bind'></a> Step 5: (Optional) Service Broker Bind Config
+
+Different options can be set while binding service instance to your application. This form sets which options are allowed to be used and what are default options for these options. Full list of options can be found in document here.
 
 1. Click **Service Broker Bind Config**.
   <%= image_tag("http://documentimages.blob.core.windows.net/smb-volume-service-doc/service-broker-bind.jpg") %>
@@ -136,7 +166,7 @@ This topic describes how to install and configure **SMB Volume Service for PCF**
 
 1. For **Mount Flag Allowed**, enter a comma-separated list of parameters to be set in the extra config. Each parameter here will specified by brokers.
 
-1. For **Mount Flag Default**, enter a comma-separted list of default values for parameters in the format of `params:value`.
+1. For **Mount Flag Default**, enter a comma-separated list of default values for parameters in the format of `params:value`.
 
 1. Click **Save**.
 
