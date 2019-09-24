@@ -1,5 +1,5 @@
 ---
-title: SMB Volume Service for PCF
+title: SMB Volume Service for Pivotal Platform
 owner: Partners
 ---
 
@@ -9,20 +9,20 @@ Shared Volumes are distributed file systems that allow instances of an applicati
 
 The Shared Volume Service for SMB enables SMB driver support, so Azure file service and SMB shared folders can be used by the Shared Volume Service.
 
-The SMB Volume Service Broker for PCF exposes the SMB service in the Marketplace. 
+The SMB Volume Service Broker for Pivotal Platform exposes the SMB service in the Marketplace. 
 It installs SMB driver in every Diego cell, provides credentials, and the SMB share URL for Cloud Controller to mount 
 SMB shares in a Diego cell. An application can bind to the service to use persistent SMB storage, such as Azure files.
 
 ## <a id='features'></a>Key Features
 
-SMB Volume Service for PCF supports following systems as persistent storage. These allow application instances to use as shared file system:
+SMB Volume Service for Pivotal Platform supports following systems as persistent storage. These allow application instances to use as shared file system:
 
 * Microsoft Azure File Service  
 * SMB Shares
 
 ## <a id="snapshot"></a>Product Snapshot
 
-The following table provides version and version-support information about SMB Volume Service for PCF.
+The following table provides version and version-support information about SMB Volume Service for Pivotal Platform.
 
 <table class="nice">
     <th>Element</th>
@@ -61,7 +61,7 @@ The following table provides version and version-support information about SMB V
 
 ## <a id="reqs"></a>Requirements
 
-SMB Volume Service for PCF has the following requirements:
+SMB Volume Service for Pivotal Platform has the following requirements:
 
 * A Microsoft SQL, or MySQL database for storing the broker's status.
 * Existing SMB shares if you only need to utilize SMB share, or Microsoft Azure Service Principal for provision of Azure File to be served as SMB shares.
@@ -69,7 +69,7 @@ SMB Volume Service for PCF has the following requirements:
 ## <a id="feedback"></a>Feedback
 
 If you have a feature request, questions, or information about a bug, please email
-[Pivotal Cloud Foundry Feedback](mailto:pivotal-cf-feedback@pivotal.io) list or send an email to
+[Pivotal Platform Feedback](mailto:pivotal-cf-feedback@pivotal.io) list or send an email to
 [Microsoft Azure Cloud Foundry Engineering](mailto:azcfengg@microsoft.com).
 
 ## <a id='license'></a>License

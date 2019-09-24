@@ -1,9 +1,9 @@
 ---
-title: Installing and Configuring SMB Volume Service for PCF
+title: Installing and Configuring SMB Volume Service for Pivotal Platform
 owner: Partners
 ---
 
-This document walks you through how to install and configure **SMB Volume Service for PCF**.
+This document walks you through how to install and configure **SMB Volume Service for Pivotal Platform**.
 
 ##<a id='prerequisite'></a> Prerequisite
 
@@ -13,7 +13,7 @@ This document walks you through how to install and configure **SMB Volume Servic
     1. `Server name`, `Server admin login`, `Password` in step 2 ([Create an Azure Database for MySQL server](https://docs.microsoft.com/en-us/azure/mysql/quickstart-create-mysql-server-database-using-azure-portal#create-an-azure-database-for-mysql-server))
     1. The name of the database you created in step 5 ([`Connect to MySQL by using the mysql command-line tool`](https://docs.microsoft.com/en-us/azure/mysql/quickstart-create-mysql-server-database-using-azure-portal#connect-to-mysql-by-using-the-mysql-command-line-tool)). 
     <p class="note"><strong>Note: </strong> Microsoft recommends `Standard` tier database for the broker, you could also adjust its tier and size based on your usage later.</p>  
-  1. Create a database instance using CF service brokers, for example, [MySQL for PCF v2](https://network.pivotal.io/products/pivotal-mysql/) or [Meta Azure service broker](https://github.com/Azure/meta-azure-service-broker).  In this way, service broker used to provide the database should be installed before you start to install this tile. We will use the Meta Azure service broker MySQL service as an example in this document. Follow the instruction [here](https://docs.pivotal.io/partners/azure-sb/installing.html) to install the service broker.
+  1. Create a database instance using CF service brokers, for example, [MySQL for Pivotal Platform v2](https://network.pivotal.io/products/pivotal-mysql/) or [Meta Azure service broker](https://github.com/Azure/meta-azure-service-broker).  In this way, service broker used to provide the database should be installed before you start to install this tile. We will use the Meta Azure service broker MySQL service as an example in this document. Follow the instruction [here](https://docs.pivotal.io/partners/azure-sb/installing.html) to install the service broker.
     <p class="note"><strong>Note: </strong> As `Open Service Broker Azure` currently does not support parameter `Connection Policy` for SQL database while TLS is forced, you will not be able to use SQL database provided by OSBA until this issue is fixed. For more details and to track this feature, see the [GitHub issue](https://github.com/Azure/open-service-broker-azure/issues/646).</p>
     <p class="note warning"><strong>WARNING: </strong> `Open Service Broker for Azure` is currently in **Beta**, do **NOT** use in production.</p>
 2.	If you plan to use Azure file service, prepare a service principal and a resource group. Then new SMB share service instances could be created with storage accounts (new or existing), requiring a service principle to access resource (Azure File Service provided by storage account) on Azure. You can either reuse an existing service principal or create a new one depending on how you want to manager the permissions. Document on how to create a new service principal can be found [here](https://github.com/cloudfoundry-incubator/bosh-azure-cpi-release/blob/master/docs/get-started/create-service-principal.md). Your storage account will be created under sprcified resource groups, while a resource group will be specified as default one. Creation and access permissions in these resource groups on storage account will be required for your service principal.
